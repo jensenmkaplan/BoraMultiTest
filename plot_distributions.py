@@ -24,6 +24,10 @@ def gamma(x, k=2, theta=0.2):
     return (x ** (k - 1) * np.exp(-x / theta)) / (math.gamma(k) * theta ** k)
 
 
+def lorentzian(x, x0=0.5, gamma_param=0.1):
+    return (1 / np.pi) * (gamma_param / ((x - x0) ** 2 + gamma_param ** 2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--save", type=str, help="Save plot to file")
@@ -63,7 +67,12 @@ def main() -> None:
     axes[1, 1].legend()
     axes[1, 1].grid(True, alpha=0.3)
 
-    axes[1, 2].axis("off")
+    axes[1, 2].plot(x, lorentzian(x, x0=0.3, gamma_param=0.05), "y-", label="Lorentzian (narrow)")
+    axes[1, 2].plot(x, lorentzian(x, x0=0.5, gamma_param=0.1), "k-", label="Lorentzian (centered)")
+    axes[1, 2].plot(x, lorentzian(x, x0=0.7, gamma_param=0.2), "orange", label="Lorentzian (broad)")
+    axes[1, 2].set_title("Lorentzian Family")
+    axes[1, 2].legend()
+    axes[1, 2].grid(True, alpha=0.3)
 
     for row in axes:
         for ax in row:
