@@ -16,6 +16,18 @@ pip install -r requirements.txt
 python plot_distributions.py
 ```
 
+For a 3D comparison view:
+
+```bash
+python plot_distributions.py --plot-3d
+```
+
+You can combine with `--save`, for example:
+
+```bash
+python plot_distributions.py --plot-3d --save distributions_3d.png
+```
+
 `plot_distributions.py` initializes an array in `[0.01, 1]` with 1000 evenly spaced steps using:
 
 ```python

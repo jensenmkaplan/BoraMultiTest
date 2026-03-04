@@ -2,6 +2,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import argparse
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 
 
 def normal(x, mu=0.5, sigma=0.1):
@@ -28,12 +29,52 @@ def lorentzian(x, x0=0.5, gamma_param=0.1):
     return (1 / np.pi) * (gamma_param / ((x - x0) ** 2 + gamma_param ** 2))
 
 
+def plot_distributions_3d(x):
+    fig = plt.figure(figsize=(12, 8))
+    ax = fig.add_subplot(111, projection="3d")
+
+    distributions = [
+        ("Normal", normal(x, mu=0.5, sigma=0.1), "b"),
+        ("Exponential", exponential(x, lam=2), "g"),
+        ("Uniform", uniform(x), "r"),
+        ("Beta", beta(x, alpha=2, beta_param=5), "m"),
+        ("Gamma", gamma(x, k=2, theta=0.2), "c"),
+        ("Lorentzian", lorentzian(x, x0=0.5, gamma_param=0.1), "k"),
+    ]
+
+    y_positions = np.arange(len(distributions))
+
+    for idx, (name, y_values, color) in enumerate(distributions):
+        y = np.full_like(x, y_positions[idx], dtype=float)
+        ax.plot(x, y, y_values, color=color, linewidth=2, label=name)
+
+    ax.set_xlabel("x")
+    ax.set_ylabel("Distribution")
+    ax.set_zlabel("Density")
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels([name for name, _, _ in distributions])
+    ax.set_title("3D Probability Distributions")
+    ax.view_init(elev=28, azim=-60)
+    ax.legend(loc="upper left")
+    fig.subplots_adjust(left=0.03, right=0.95, bottom=0.08, top=0.92)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--save", type=str, help="Save plot to file")
+    parser.add_argument("--plot-3d", action="store_true", help="Render 3D line plot")
     args = parser.parse_args()
 
     x = np.linspace(0.01, 1.0, 1000)
+
+    if args.plot_3d:
+        plot_distributions_3d(x)
+        if args.save:
+            plt.savefig(args.save, dpi=150)
+            print(f"Saved to {args.save}")
+        else:
+            plt.show()
+        return
 
     fig, axes = plt.subplots(2, 3, figsize=(12, 8))
 
