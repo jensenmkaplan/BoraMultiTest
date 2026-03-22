@@ -1,5 +1,7 @@
 import numpy as np
 import math
+import matplotlib
+matplotlib.use("macosx")
 import matplotlib.pyplot as plt
 import argparse
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
@@ -99,7 +101,7 @@ def probability_between(
 
 
 def plot_all_3d_subplots(x, mix_with=None, mix_base="lorentzian", mix_amplitude=1.0, renormalize=True):
-    fig = plt.figure(figsize=(16, 10))
+    fig = plt.figure(figsize=(18, 11))
     n_curves = 8
 
     # Normal — vary sigma
@@ -175,7 +177,7 @@ def plot_all_3d_subplots(x, mix_with=None, mix_base="lorentzian", mix_amplitude=
     ax.view_init(elev=25, azim=-55)
 
     plt.suptitle("Probability Distributions (3D Parameter Families)", fontsize=13, fontweight="bold")
-    plt.tight_layout()
+    plt.subplots_adjust(left=0.02, right=0.98, top=0.93, bottom=0.05, wspace=0.35, hspace=0.3)
 
 
 def plot_distributions_3d(x, mix_base=None, mix_with=None, mix_amplitude=1.0, renormalize=True):
